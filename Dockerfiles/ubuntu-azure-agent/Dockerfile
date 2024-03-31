@@ -16,7 +16,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     wget \
     tree \
     telnet \
-    nano
+    nano \
+    nodejs \
+    npm
 
 RUN mkdir -p /opt/miniconda3
 RUN mkdir -p /opt/dotnet6
@@ -53,6 +55,7 @@ ENV PATH="${PATH}:${JAVA_HOME}/bin"
 ENV CONDA_ENVS_DIRS=/data/.conda/envs
 ENV NUGET_PACKAGES=/data/.nuget
 ENV MAVEN_OPTS="-Dmaven.repo.local=/data/.m2"
+RUN npm config set prefix /data/.npm
 
 WORKDIR /azp
 
