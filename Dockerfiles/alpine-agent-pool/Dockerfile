@@ -4,8 +4,13 @@ FROM quay.io/podman/stable as base
 RUN mkdir -p /opt /data
 
 # Repo credential
+## Temurin
 COPY adoptium.repo /etc/yum.repos.d/adoptium.repo
-RUN cat /etc/yum.repos.d/adoptium.repo
+## Powershell
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
+RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo
+RUN dnf makecache
 
 # Install software system
 ## By package manager
@@ -25,7 +30,8 @@ RUN dnf install -y \
     temurin-11-jdk \
     nodejs \
     npm \
-    dotnet-sdk-6.0
+    dotnet-sdk-6.0 \
+    powershell
 ## By manual
 RUN mkdir -p /opt/maven && \
     wget -qO- https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.3/apache-maven-3.6.3-bin.tar.gz | tar xvz -C /opt/maven
