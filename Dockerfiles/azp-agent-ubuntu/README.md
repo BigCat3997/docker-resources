@@ -17,6 +17,7 @@ The image uses to build Azure self-hosted agent as Docker container.
 ```bash
     docker run -it \
         -v /data:/data \
+        -v /var/run/docker.sock:/var/run/docker.sock \
         -e AZP_URL=<ORG_URL> \
         -e AZP_TOKEN=<PAT> \
         -e AZP_POOL=<POOL_NAME> \
