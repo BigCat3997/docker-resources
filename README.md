@@ -10,6 +10,6 @@ The project definds Dockerfiles to build specific significant images.
 
 My own template list:
 
-- ([azp-agent-fedora](https://github.com/BigCat3997/azure-pipelines/blob/main/Dockerfiles/azp-agent-fedora))
-- ([azp-agent-ubuntu](https://github.com/BigCat3997/azure-pipelines/blob/main/Dockerfiles/azp-agent-ubuntu))
+- ([azp-agent-fedora](https://github.com/BigCat3997/docker-resources/blob/main/Dockerfiles/azp-agent-fedora))
+- ([azp-agent-ubuntu](https://github.com/BigCat3997/docker-resources/blob/main/Dockerfiles/azp-agent-ubuntu))
 - Continuously evaluate.
