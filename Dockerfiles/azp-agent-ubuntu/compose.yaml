@@ -1,0 +1,34 @@
+services:
+  agent_1:
+    image: "bigcat3997/azp-agent-ubuntu:1.0.0"
+    container_name: azp-agent-ubuntu-1
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 1 - Ubuntu
+    volumes:
+      - /data:/data
+    restart: always
+  agent_2:
+    image: "bigcat3997/azp-agent-ubuntu:1.0.0"
+    container_name: azp-agent-ubuntu-2
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 2 - Ubuntu
+    volumes:
+      - /data:/data
+    restart: always
+  agent_3:
+    image: "bigcat3997/azp-agent-ubuntu:1.0.0"
+    container_name: azp-agent-ubuntu-3
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 3 - Ubuntu
+    volumes:
+      - /data:/data
+    restart: always

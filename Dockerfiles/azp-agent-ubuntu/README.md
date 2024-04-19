@@ -16,21 +16,26 @@ The image uses to build Azure self-hosted agent as Docker container.
 
 ```bash
     docker run -it \
-        -v <WHERE_YOU_WANT_ON_HOST>/data:/data \
-        -e AZP_URL="https://dev.azure.com/<ORG_NAME>" \
+        -v /data:/data \
+        -e AZP_URL=<ORG_URL> \
         -e AZP_TOKEN=<PAT> \
-        -e AZP_POOL="azp-agent-ubuntu-docker" \
+        -e AZP_POOL=<POOL_NAME> \
         -e AZP_AGENT_NAME="Docker Agent 1 - Ubuntu" \
-        --name azp-agent-ubuntu \
-        azp-agent-ubuntu:1.0.0
+        --name azp-agent-ubuntu-1 \
+        bigcat3997/azp-agent-ubuntu:1.0.0
 ```
 
 ### Compose images
 
 ```bash
+    export AZP_URL=<ORG_URL>
+    export AZP_TOKEN=<PAT>
+    export AZP_POOL=<POOL_NAME>
+
     docker compose up -d
 ```
 
 ## Preference
 
 https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/linux-agent?view=azure-devops
+https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops
