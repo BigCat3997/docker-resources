@@ -8,7 +8,7 @@ services:
       - AZP_POOL=$AZP_POOL
       - AZP_AGENT_NAME=Docker Agent 1 - Ubuntu
     volumes:
-      - /data:/data
+      - ./data:/data
     restart: always
   agent_2:
     image: "bigcat3997/azp-agent-ubuntu:1.0.0"
@@ -19,7 +19,7 @@ services:
       - AZP_POOL=$AZP_POOL
       - AZP_AGENT_NAME=Docker Agent 2 - Ubuntu
     volumes:
-      - /data:/data
+      - ./data:/data
     restart: always
   agent_3:
     image: "bigcat3997/azp-agent-ubuntu:1.0.0"
@@ -30,5 +30,5 @@ services:
       - AZP_POOL=$AZP_POOL
       - AZP_AGENT_NAME=Docker Agent 3 - Ubuntu
     volumes:
-      - /data:/data
+      - ./data:/data
     restart: always
