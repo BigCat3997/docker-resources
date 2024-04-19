@@ -62,6 +62,7 @@ RUN chmod +x ./start.sh
 
 RUN mkdir -p /opt
 RUN useradd -m -d /home/agent agent
+RUN usermod -a -G docker agent
 RUN chown -R agent:agent /azp /home/agent /opt
 
 USER agent
