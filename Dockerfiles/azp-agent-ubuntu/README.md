@@ -2,7 +2,7 @@
 
 ## Introduce
 
-The image uses to build Azure self-hosted agent as Docker container.
+The image uses to build Azure self-hosted agent as Docker container. The Docker build in this image mount the /var/run/docker.socket that mean I remote to Docker deamon on the host.
 
 ## Treat with it
 
