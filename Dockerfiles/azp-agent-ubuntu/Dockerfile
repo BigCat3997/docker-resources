@@ -60,10 +60,10 @@ WORKDIR /azp/
 COPY ./start.sh ./
 RUN chmod +x ./start.sh
 
-RUN mkdir -p /opt
+RUN mkdir -p /opt /data
 RUN useradd -m -d /home/agent agent
 RUN usermod -a -G docker agent
-RUN chown -R agent:agent /azp /home/agent /opt
+RUN chown -R agent:agent /azp /home/agent /opt /data
 
 USER agent
 # Install software user
