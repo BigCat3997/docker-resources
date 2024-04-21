@@ -18,6 +18,7 @@ RUN apt install -y \
         curl \
         git \
         jq \
+        libxml2-utils \
         tree \
         nano \
         vim \
@@ -34,7 +35,7 @@ RUN chmod a+r /etc/apt/keyrings/docker.asc
 RUN echo \
         "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-            tee /etc/apt/sources.list.d/docker.list > /dev/null
+        tee /etc/apt/sources.list.d/docker.list > /dev/null
 ## Powershell
 RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
