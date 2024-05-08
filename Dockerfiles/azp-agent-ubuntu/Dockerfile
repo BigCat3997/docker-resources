@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 ENV TARGETARCH="linux-x64"
+ARG ACTIVE_USER="agent"
 
 # Install software system
 ## By package manager
@@ -62,11 +63,11 @@ COPY ./start.sh ./
 RUN chmod +x ./start.sh
 
 RUN mkdir -p /opt /data
-RUN useradd -m -d /home/agent agent
-RUN usermod -a -G docker agent
-RUN chown -R agent:agent /azp /home/agent /opt /data
+RUN useradd -m -d /home/$ACTIVE_USER $ACTIVE_USER
+RUN usermod -a -G docker $ACTIVE_USER
+RUN chown -R $ACTIVE_USER:$ACTIVE_USER /azp /home/$ACTIVE_USER /opt /data
 
-USER agent
+USER $ACTIVE_USER
 # Install software user
 ## Miniconda
 RUN mkdir -p /opt/miniconda3 && \
