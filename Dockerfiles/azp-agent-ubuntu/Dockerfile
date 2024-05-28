@@ -41,6 +41,8 @@ RUN echo \
 RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
 RUN rm packages-microsoft-prod.deb
+## Npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 RUN apt update
 RUN apt-get install -y \
@@ -53,7 +55,6 @@ RUN apt-get install -y \
         temurin-17-jdk \
         temurin-11-jdk \
         nodejs \
-        npm \
         dotnet-sdk-6.0 \
         powershell
 
