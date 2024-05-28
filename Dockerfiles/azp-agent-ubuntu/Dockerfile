@@ -83,6 +83,8 @@ RUN curl -LsS https://vstsagentpackage.azureedge.net/agent/3.238.0/vsts-agent-li
 ## Change the location contains libraries of platforms
 ENV CONDA_ENVS_DIRS=/data/.conda/envs
 ENV NUGET_PACKAGES=/data/.nuget
+ENV JAVA_JDK17_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+ENV JAVA_JDK11_HOME=/usr/lib/jvm/temurin-11-jdk-amd64
 ENV MAVEN_OPTS="-Dmaven.repo.local=/data/.m2"
 RUN npm config set prefix /data/.npm
 
