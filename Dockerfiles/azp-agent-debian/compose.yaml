@@ -1,0 +1,37 @@
+services:
+  agent_1:
+    image: "bigcat3997/azp-agent-debian:1.0.0"
+    container_name: azp-agent-debian-1
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 1 - Debian
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+  agent_2:
+    image: "bigcat3997/azp-agent-debian:1.0.0"
+    container_name: azp-agent-debian-2
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 2 - Debian
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+  agent_3:
+    image: "bigcat3997/azp-agent-debian:1.0.0"
+    container_name: azp-agent-debian-3
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 3 - Debian
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
