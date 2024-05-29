@@ -26,7 +26,7 @@ RUN apt install -y \
         zip
 
 # Repo credential
-## Temurin
+## Temurin JDK
 RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add -
 RUN echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
 ## Docker
@@ -37,14 +37,14 @@ RUN echo \
         "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
         tee /etc/apt/sources.list.d/docker.list > /dev/null
-## Powershell
-RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb
-RUN dpkg -i packages-microsoft-prod.deb
-RUN rm packages-microsoft-prod.deb
-## Npm
+## MS software
+RUN apt remove 'dotnet*' 'aspnet*' 'netstandard*' -y && \
+        touch /etc/apt/preferences && \
+        printf 'Package: dotnet* aspnet* netstandard* powershell\nPin: origin "packages.microsoft.com"\nPin-Priority: -10\n' >> /etc/apt/preferences
+## Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
-RUN apt update
+RUN apt-get update
 RUN apt-get install -y \
         docker-ce \
         docker-ce-cli \
@@ -55,8 +55,13 @@ RUN apt-get install -y \
         temurin-17-jdk \
         temurin-11-jdk \
         nodejs \
-        dotnet-sdk-6.0 \
-        powershell
+        dotnet-sdk-6.0
+
+# Install manually software
+# Download the PowerShell package file
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.2/powershell_7.4.2-1.deb_amd64.deb && \
+        dpkg -i powershell_7.4.2-1.deb_amd64.deb && \
+        rm powershell_7.4.2-1.deb_amd64.deb
 
 WORKDIR /azp/
 
@@ -69,6 +74,7 @@ RUN usermod -a -G docker $ACTIVE_USER
 RUN chown -R $ACTIVE_USER:$ACTIVE_USER /azp /home/$ACTIVE_USER /opt /data
 
 USER $ACTIVE_USER
+
 # Install software user
 ## Miniconda
 RUN mkdir -p /opt/miniconda3 && \
