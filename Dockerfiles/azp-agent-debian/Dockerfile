@@ -52,11 +52,17 @@ RUN apt-get install -y \
         docker-buildx-plugin \
         docker-compose-plugin \
         maven \
+        temurin-21-jdk \
         temurin-17-jdk \
         temurin-11-jdk \
         nodejs \
         dotnet-sdk-6.0 \
         powershell
+
+RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && \
+        chmod 700 get_helm.sh && \
+        ./get_helm.sh && \
+        rm -rf get_helm.sh
 
 WORKDIR /azp/
 
@@ -83,6 +89,7 @@ RUN curl -LsS https://vstsagentpackage.azureedge.net/agent/3.238.0/vsts-agent-li
 ## Change the location contains libraries of platforms
 ENV CONDA_ENVS_DIRS=/data/.conda/envs
 ENV NUGET_PACKAGES=/data/.nuget
+ENV JAVA_JDK21_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
 ENV JAVA_JDK17_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
 ENV JAVA_JDK11_HOME=/usr/lib/jvm/temurin-11-jdk-amd64
 ENV MAVEN_OPTS="-Dmaven.repo.local=/data/.m2"
