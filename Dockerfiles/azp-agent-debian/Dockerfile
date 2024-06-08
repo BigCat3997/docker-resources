@@ -59,10 +59,14 @@ RUN apt-get install -y \
         dotnet-sdk-6.0 \
         powershell
 
+## Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && \
         chmod 700 get_helm.sh && \
         ./get_helm.sh && \
         rm -rf get_helm.sh
+
+## Az
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 WORKDIR /azp/
 
