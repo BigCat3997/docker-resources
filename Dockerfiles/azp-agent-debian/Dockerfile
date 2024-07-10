@@ -26,6 +26,19 @@ RUN apt install -y \
         vim \
         zip
 
+## For Python3.10
+RUN apt install -y \
+        build-essential \
+        zlib1g-dev \
+        libncurses5-dev \
+        libgdbm-dev \
+        libnss3-dev \
+        libssl-dev \
+        libreadline-dev \
+        libffi-dev \
+        libsqlite3-dev \
+        libbz2-dev
+
 # Repo credential
 ## Temurin JDK
 RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add -
@@ -73,6 +86,15 @@ RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 >
 
 ## Az
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+## Python3.10
+RUN wget https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tgz && \
+        tar -xvf Python-3.10.11.tgz && \
+        cd Python-3.10.11 && \
+        ./configure --enable-optimizations && \
+        make -j 2 && \
+        nproc && \
+        make altinstall
 
 WORKDIR /azp/
 
