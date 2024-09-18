@@ -24,20 +24,8 @@ RUN apt install -y \
         tree \
         nano \
         vim \
-        zip
-
-## For Python3.10
-RUN apt install -y \
-        build-essential \
-        zlib1g-dev \
-        libncurses5-dev \
-        libgdbm-dev \
-        libnss3-dev \
-        libssl-dev \
-        libreadline-dev \
-        libffi-dev \
-        libsqlite3-dev \
-        libbz2-dev
+        zip \
+        sudo
 
 # Repo credential
 ## Temurin JDK
@@ -69,9 +57,17 @@ RUN apt-get install -y \
         temurin-21-jdk \
         temurin-17-jdk \
         temurin-11-jdk \
-        nodejs \
-        dotnet-sdk-6.0 \
-        powershell
+        nodejs
+
+# Install .NET 6 SDK and Runtime
+RUN apt-get update && apt-get install -y dotnet-sdk-6.0 dotnet-runtime-6.0
+
+# Install .NET 8 SDK and Runtime
+RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+        chmod +x dotnet-install.sh && \
+        ./dotnet-install.sh --channel 8.0 --install-dir /usr/share/dotnet8 && \
+        ln -s /usr/share/dotnet8/dotnet /usr/bin/dotnet8 && \
+        rm dotnet-install.sh
 
 ## Kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
@@ -87,24 +83,16 @@ RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 >
 ## Az
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-## Python3.10
-RUN wget https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tgz && \
-        tar -xvf Python-3.10.11.tgz && \
-        cd Python-3.10.11 && \
-        ./configure --enable-optimizations && \
-        make -j 2 && \
-        nproc && \
-        make altinstall
-
 WORKDIR /azp/
 
 COPY ./start.sh ./
 RUN chmod +x ./start.sh
 
 RUN mkdir -p /opt /data
-RUN useradd -m -d /home/$ACTIVE_USER $ACTIVE_USER
-RUN usermod -a -G docker $ACTIVE_USER
-RUN chown -R $ACTIVE_USER:$ACTIVE_USER /azp /home/$ACTIVE_USER /opt /data
+RUN useradd -m -s /bin/bash $ACTIVE_USER
+RUN usermod -aG root,docker,sudo agent
+RUN chown -R $ACTIVE_USER:$ACTIVE_USER /azp /opt /data
+RUN echo "$ACTIVE_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER $ACTIVE_USER
 # Install software user
@@ -119,12 +107,16 @@ RUN curl -LsS https://vstsagentpackage.azureedge.net/agent/3.238.0/vsts-agent-li
 
 # Expose environment variables
 ## Change the location contains libraries of platforms
+ENV AGENT_ALLOW_RUNASROOT=1
 ENV CONDA_ENVS_DIRS=/data/.conda/envs
 ENV NUGET_PACKAGES=/data/.nuget
 ENV JAVA_JDK21_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
 ENV JAVA_JDK17_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
 ENV JAVA_JDK11_HOME=/usr/lib/jvm/temurin-11-jdk-amd64
 ENV MAVEN_OPTS="-Dmaven.repo.local=/data/.m2"
+ENV DOTNET_ROOT=/usr/share/dotnet
+ENV PATH=$PATH:/usr/share/dotnet:/usr/share/dotnet8
+
 RUN npm config set prefix /data/.npm
 
 ENTRYPOINT ./start.sh
