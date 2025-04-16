@@ -1,0 +1,70 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: graylog-mongo
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - graylog
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping').ok" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.17
+    container_name: graylog-es
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+    networks:
+      - graylog
+    ports:
+      - 9200:9200
+      - 9300:9300
+    restart: unless-stopped
+    healthcheck:
+      test: curl -s http://localhost:9200 >/dev/null; if [[ $? -eq 0 ]]; then exit 0; else exit 1; fi
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  graylog:
+    image: graylog/graylog:6.1.10
+    container_name: graylog
+    volumes:
+      - graylog_data:/usr/share/graylog/data/journal
+    environment:
+      - GRAYLOG_NODE_NAME=graylog-server
+      - GRAYLOG_HTTP_BIND_ADDRESS=0.0.0.0:9000
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://0.0.0.0:9000/
+      - GRAYLOG_PASSWORD_SECRET=some_secret_password_here
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_MONGODB_URI=mongodb://graylog-mongo:27017/graylog
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://graylog-es:9200
+      #- GRAYLOG_OPENSEARCH_HOSTS=http://graylog-os:9200
+    networks:
+      - graylog
+    ports:
+      - 9000:9000
+      - 1514:1514
+      - 1514:1514/udp
+    depends_on:
+      - mongodb
+      - elasticsearch
+    restart: unless-stopped
+    healthcheck:
+      test: curl -s http://localhost:9000 >/dev/null; if [[ $? -eq 0 ]]; then exit 0; else exit 1; fi
+
+networks:
+  graylog:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  es_data:
+  graylog_data:
