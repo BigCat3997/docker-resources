@@ -1,0 +1,13 @@
+services:
+  agent_1:
+    image: "bigcat3997/azure-devops/azp-agent-debian-bookworm:1.0.0"
+    container_name: azp-agent-debian-bookworm-1
+    environment:
+      - AZP_URL=$AZP_URL
+      - AZP_TOKEN=$AZP_TOKEN
+      - AZP_POOL=$AZP_POOL
+      - AZP_AGENT_NAME=Docker Agent 1 - Debian
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
