@@ -39,13 +39,15 @@ RUN echo \
         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
         tee /etc/apt/sources.list.d/docker.list > /dev/null
 ## MS software
-RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
         dpkg -i packages-microsoft-prod.deb && \
         rm -rf packages-microsoft-prod.deb
 ## Npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
+# Update credential for repo before install software here
 RUN apt-get update
+
 RUN apt-get install -y \
         docker-ce \
         docker-ce-cli \
@@ -59,7 +61,7 @@ RUN apt-get install -y \
         nodejs
 
 # Install .NET 6 SDK and Runtime
-RUN apt-get update && apt-get install -y dotnet-sdk-6.0 dotnet-runtime-6.0
+RUN apt-get install -y dotnet-sdk-6.0 dotnet-runtime-6.0
 
 # Install .NET 8 SDK and Runtime
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
@@ -67,6 +69,12 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
         ./dotnet-install.sh --channel 8.0 --install-dir /usr/share/dotnet8 && \
         ln -s /usr/share/dotnet8/dotnet /usr/bin/dotnet8 && \
         rm dotnet-install.sh
+
+## Az
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+# Azcopy
+RUN apt-get install -y azcopy
 
 ## Kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
@@ -78,9 +86,6 @@ RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 >
         chmod 700 get_helm.sh && \
         ./get_helm.sh && \
         rm -rf get_helm.sh
-
-## Az
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # Terraform
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
