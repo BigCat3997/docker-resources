@@ -1,0 +1,12 @@
+services:
+  fluentd:
+    build: .
+    volumes:
+      - ./conf:/fluentd/etc
+      - ./fluentd_data:/fluentd/log
+      - ./my_app_logs:/var/log/my_app:ro
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+      - "5140:5140/udp"
+      - "24231:24231/tcp"
